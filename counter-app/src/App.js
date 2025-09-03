@@ -7,11 +7,18 @@ function App() {
   const dispatch = useDispatch();
 
   const handleIncrement = () => {
-    // if first increment, mark session start
     if (value === 0) {
       dispatch(startSession());
     }
     dispatch(increment());
+  };
+
+  const handleDecrement = () => {
+    if (value === 0) return; // prevent going below 0
+    if (value === 1 && !history.length) {
+      dispatch(startSession());
+    }
+    dispatch(decrement());
   };
 
   return (
@@ -28,7 +35,7 @@ function App() {
           Increment
         </button>
         <button
-          onClick={() => dispatch(decrement())}
+          onClick={handleDecrement}
           className="px-4 py-2 bg-red-500 text-white rounded-lg shadow-md hover:bg-red-600"
         >
           Decrement

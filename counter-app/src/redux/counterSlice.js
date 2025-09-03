@@ -2,43 +2,45 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const counterSlice = createSlice({
   name: "counter",
-  initialState: { 
+  initialState: {
     value: 0,
-    history: []   // store session logs
+    history: [],
+    startTime: null, // will store Date object internally
   },
   reducers: {
     increment: (state) => {
       state.value += 1;
     },
     decrement: (state) => {
-      state.value -= 1;
+      if (state.value > 0) {
+        state.value -= 1;
+      }
     },
     reset: (state) => {
       const now = new Date();
 
-      // Only log if counter was > 0 (a session actually happened)
-      if (state.value > 0) {
-        const startTime = state.startTime || now;
+      if (state.startTime !== null) {
         const endTime = now;
+        const duration = Math.floor((endTime - state.startTime) / 1000);
 
-        // duration in seconds
-        const duration = Math.floor((endTime - startTime) / 1000);
-
+        // store strings to avoid React errors
         state.history.push({
-          start: startTime.toLocaleString(),
+          start: state.startTime.toLocaleString(),
           end: endTime.toLocaleString(),
-          duration: `${duration} sec`
+          duration: `${duration} sec`,
         });
       }
 
-      // reset state
+      // reset
       state.value = 0;
       state.startTime = null;
     },
     startSession: (state) => {
-      state.startTime = new Date(); // record session start
-    }
-  }
+      if (state.startTime === null) {
+        state.startTime = new Date();
+      }
+    },
+  },
 });
 
 export const { increment, decrement, reset, startSession } = counterSlice.actions;
