@@ -34,7 +34,7 @@ export default function SignupForm() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100 px-4">
+    <div className="flex items-center justify-center min-h-screen bg-gray-100 py-6 sm:py-8 px-4">
       <form
         onSubmit={handleSubmit}
         className="w-full max-w-2xl bg-white shadow-lg rounded-2xl p-8 space-y-4"
