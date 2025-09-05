@@ -1,5 +1,17 @@
 its have two react projects
 
+Data cleaning → remove duplicates, fix missing values.
+
+Standardization → date formats, currencies, units.
+
+Integration → merging data from multiple sources (e.g., sales + customer data).
+
+Aggregation → total sales per month, per region.
+
+Schema mapping → align data with warehouse schema (e.g., star/snowflake schema).
+
+
+
 
 That’s a great question—you’re right that **cloud platforms (AWS, Azure, GCP, Snowflake, etc.) are expensive if used without caution**, but beginners can learn **the core concepts and practice for free or at very low cost**.
 
