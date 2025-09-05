@@ -1,15 +1,17 @@
 its have two react projects
 
 Data cleaning → remove duplicates, fix missing values.
-
 Standardization → date formats, currencies, units.
-
 Integration → merging data from multiple sources (e.g., sales + customer data).
-
 Aggregation → total sales per month, per region.
-
 Schema mapping → align data with warehouse schema (e.g., star/snowflake schema).
 
+Scaling/Normalization → so features have equal weight (e.g., Min–Max scaling).
+Encoding categorical variables → one-hot encoding, label encoding.
+Feature engineering → creating new columns like “revenue = price × quantity”.
+Text transformations → TF-IDF, embeddings.
+Image/audio transformations → resizing, normalization, augmentation.
+📍 End product: Data ready for training ML algorithms.
 
 
 
