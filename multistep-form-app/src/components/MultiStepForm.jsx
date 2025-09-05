@@ -2,19 +2,19 @@ import React, { useState } from "react";
 import StepForm from "./StepForm";
 import ProgressBar from "./ProgressBar";
 import useValidation from "../hooks/useValidation";
+import { useSelector, useDispatch } from "react-redux";
+import { updateField } from "../redux/formslice";
+
+import { useNavigate } from "react-router-dom"; // ✅ new
+
 
 export default function MultiStepForm() {
-  const totalSteps = 4; // UI shows "Step X of 4"
+  const totalSteps = 3; // now fixed to 3
   const [step, setStep] = useState(1);
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    address: "",
-    city: "",
-    country: "",
-    document: null,
-  });
+
+  const formData = useSelector((state) => state.form);  // ✅ get form data from Redux
+  const dispatch = useDispatch();  // ✅ to send actions to Redux
+  const navigate = useNavigate(); // ✅ new
 
   // ✅ custom validation hook
   const { errors, validate, validateAll } = useValidation(formData);
@@ -23,8 +23,12 @@ export default function MultiStepForm() {
   const handleChange = (e) => {
     const { name, value, files } = e.target;
     const fieldValue = files ? files[0] : value;
-    setFormData({ ...formData, [name]: fieldValue });
-    validate(name, fieldValue); // live check
+
+    // ✅ update Redux state
+    dispatch(updateField({ name, value: fieldValue }));
+
+    // run live validation
+    validate(name, fieldValue);
   };
 
   // check current step validity
@@ -51,24 +55,27 @@ export default function MultiStepForm() {
     return false;
   };
 
-  // ✅ Next uses only current step validity
+  // Next button → go forward if valid
   const nextStep = () => {
-    if (step < 3 && isStepValid()) {
+    if (step < totalSteps && isStepValid()) {
       setStep(step + 1);
     }
   };
 
-  // Back
+  // Back button → go back
   const prevStep = () => {
     if (step > 1) setStep(step - 1);
   };
 
-  // ✅ Submit runs full validation
+  // Submit → validate all + reset Redux
   const handleSubmit = (e) => {
     e.preventDefault();
     if (validateAll(formData)) {
       alert("Form submitted successfully!");
+      navigate("/summary");
       console.log(formData);
+
+      
     }
   };
 
@@ -93,7 +100,7 @@ export default function MultiStepForm() {
 
           {/* Navigation Buttons */}
           <div className="flex justify-between mt-8">
-            {/* Back button (always visible, disabled on step 1) */}
+            {/* Back button */}
             <button
               type="button"
               onClick={prevStep}
@@ -107,7 +114,7 @@ export default function MultiStepForm() {
               Back
             </button>
 
-            {step < 3 ? (
+            {step < totalSteps ? (
               <button
                 type="button"
                 onClick={nextStep}
