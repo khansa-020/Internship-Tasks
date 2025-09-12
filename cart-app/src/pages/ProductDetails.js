@@ -6,15 +6,28 @@ import { addToCart } from "../features/cartSlice";
 export default function ProductDetails() {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
+  const [loading, setLoading] = useState(true);
   const dispatch = useDispatch();
 
   useEffect(() => {
+    setLoading(true);
     fetch(`https://dummyjson.com/products/${id}`)
       .then((res) => res.json())
-      .then((data) => setProduct(data));
+      .then((data) => {
+        setProduct(data);
+        setLoading(false);
+      });
   }, [id]);
 
-  if (!product) return <p className="p-6 text-center">Loading...</p>;
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-80">
+        <div className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+      </div>
+    );
+  }
+
+  if (!product) return <p className="p-6 text-center">Product not found</p>;
 
   return (
     <div className="p-6 flex flex-col md:flex-row gap-6">
@@ -37,7 +50,10 @@ export default function ProductDetails() {
         <p className="text-gray-500 mb-4">Category: {product.category}</p>
 
         <button
-          onClick={() => dispatch(addToCart(product))}
+          onClick={() => {
+            dispatch(addToCart(product));
+            alert(`${product.title} added to cart ✅`);
+          }}
           className="px-6 py-3 rounded bg-gradient-to-r from-blue-500 to-purple-500 text-white font-semibold"
         >
           Add to Cart
